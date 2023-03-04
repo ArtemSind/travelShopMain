@@ -7,18 +7,12 @@ import {ITours} from "../../models/tours";
 import {getTourTemplate} from "../../templates/tours";
 import {openModal} from "@services/modal/modalService";
 import {getTours} from "@rest/tours";
+import {Modal} from "../../classess/modal";
 
 export function initApp(toursDataArray: ITours[]): void {
     initHeaderTitle('Туры', 'h1');
     initFooterTitle('Туры по всему миру', 'h2');
-// init data
-    const tourData: Promise<ITours[]> = getTours();
-
-    tourData.then((data): void => {
-        console.log('call ')
-        toursDataArray = data;
-        initToursDivElements(data);
-    });
+    initCloseModalListener();
 }
 
 export function initHeaderTitle(ticketName: string, selector: string): void {
@@ -37,7 +31,7 @@ export function initFooterTitle(ticketName: string, selector: string): void {
     }
 }
 
-function initToursDivElements(data: ITours[]): void {
+export function initToursDivElements(data: ITours[]): void {
 
     const rootElement: Element = document.querySelector('.main-app');
     const tourWrap: HTMLDivElement = document.createElement('div');
@@ -71,9 +65,21 @@ function initTourElemListener(tourWrap: HTMLElement): void {
 
         if (realTarget) {
             const dataIndex: string = realTarget.getAttribute('data-tour-item-index');
-            openModal('order', Number(dataIndex));
+            openModal('order', parseInt(dataIndex));
         }
     });
+}
+
+function initCloseModalListener() {
+    document.addEventListener('click', ev => {
+        const targetItem = ev.target as HTMLDivElement;
+        if (!targetItem.classList.contains('close-modal'))
+            return;
+
+        const id: string = document.querySelector('.modal-element').getAttribute('modal-id');
+        Modal.removeById(id);
+    })
+
 }
 
 

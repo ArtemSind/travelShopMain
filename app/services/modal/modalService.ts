@@ -10,10 +10,9 @@ export function openModal(type: string, i: number): void {
     const data: ITours = toursDataArray[i];
     const tourId: string = data[i]?.id;
 
-    let modalInfo = {};
     switch (type) {
-        case "order":
-            const modalTemplate = `
+        case 'order':
+            const modalTemplate: string = `
       <div> 
         <p data-moda-id="tour-modal" class="close-modal">x</p>
         <p>${data.name}</p>
@@ -24,7 +23,7 @@ export function openModal(type: string, i: number): void {
         </div>
      </div>
   `
-            const modal = new Modal('tour-modal');
+            const modal: Modal = new Modal('tour-modal');
             modal.open(modalTemplate);
             break;
     }

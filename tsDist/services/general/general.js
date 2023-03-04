@@ -1,20 +1,14 @@
 "use strict";
 /* Общие методы используются для вставки текста в header   footer*/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initFooterTitle = exports.initHeaderTitle = exports.initApp = void 0;
+exports.initToursDivElements = exports.initFooterTitle = exports.initHeaderTitle = exports.initApp = void 0;
 var tours_1 = require("../../templates/tours");
 var modalService_1 = require("@services/modal/modalService");
-var tours_2 = require("@rest/tours");
+var modal_1 = require("../../classess/modal");
 function initApp(toursDataArray) {
     initHeaderTitle('Туры', 'h1');
     initFooterTitle('Туры по всему миру', 'h2');
-    // init data
-    var tourData = (0, tours_2.getTours)();
-    tourData.then(function (data) {
-        console.log('call ');
-        toursDataArray = data;
-        initToursDivElements(data);
-    });
+    initCloseModalListener();
 }
 exports.initApp = initApp;
 function initHeaderTitle(ticketName, selector) {
@@ -46,6 +40,7 @@ function initToursDivElements(data) {
     tourWrap.innerHTML = rootElementData;
     rootElement.appendChild(tourWrap);
 }
+exports.initToursDivElements = initToursDivElements;
 function initTourElemListener(tourWrap) {
     tourWrap.addEventListener('click', function (ev) {
         var targetItem = ev.target;
@@ -59,8 +54,17 @@ function initTourElemListener(tourWrap) {
         }
         if (realTarget) {
             var dataIndex = realTarget.getAttribute('data-tour-item-index');
-            (0, modalService_1.openModal)('order', Number(dataIndex));
+            (0, modalService_1.openModal)('order', parseInt(dataIndex));
         }
+    });
+}
+function initCloseModalListener() {
+    document.addEventListener('click', function (ev) {
+        var targetItem = ev.target;
+        if (!targetItem.classList.contains('close-modal'))
+            return;
+        var id = document.querySelector('.modal-id').getAttribute('modal-id');
+        modal_1.Modal.removeById(id);
     });
 }
 //# sourceMappingURL=general.js.map

@@ -16,7 +16,7 @@ export class Modal {
     }
 
     public open(template: string): void {
-        const divWrap = document.createElement("div");
+        const divWrap: HTMLDivElement = document.createElement("div");
         divWrap.innerHTML = template;
         divWrap.id = this.id;
         divWrap.setAttribute('modal-id', this.id);
